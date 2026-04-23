@@ -1,6 +1,6 @@
 import { useDeferredValue, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../lib/api";
+import { api, getImageUrl } from "../lib/api";
 
 export default function HomePage() {
   const [shops, setShops] = useState([]);
@@ -52,7 +52,7 @@ export default function HomePage() {
           {visibleShops.map((shop) => (
             <article className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" key={shop.id || shop._id}>
               <div className="h-48 bg-slate-100 relative">
-                {shop.imageUrl ? <img className="w-full h-full object-cover group-hover:scale-105 transition-transform" src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"}${shop.imageUrl}`} alt={shop.name} /> : <div className="w-full h-full flex items-center justify-center bg-primary-50"><span className="text-4xl">{shop.name.charAt(0)}</span></div>}
+                {shop.imageUrl ? <img className="w-full h-full object-cover group-hover:scale-105 transition-transform" src={getImageUrl(shop.imageUrl)} alt={shop.name} /> : <div className="w-full h-full flex items-center justify-center bg-primary-50"><span className="text-4xl">{shop.name.charAt(0)}</span></div>}
               </div>
               <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold mb-2">{shop.name}</h3>

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import StatusBadge from "../components/StatusBadge";
 import { useOrderRealtime } from "../hooks/useOrderRealtime";
-import { api } from "../lib/api";
+import { api, getImageUrl } from "../lib/api";
 
 export default function VendorDashboard() {
   const [shop, setShop] = useState(null);
@@ -228,7 +228,7 @@ export default function VendorDashboard() {
                   )}
                   {shop.imageUrl && !shopImage && (
                     <div className="w-full h-32 rounded-xl overflow-hidden mt-2 border border-slate-200">
-                       <img src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"}${shop.imageUrl}`} alt={shop.name} className="w-full h-full object-cover" />
+                       <img src={getImageUrl(shop.imageUrl)} alt={shop.name} className="w-full h-full object-cover" />
                     </div>
                   )}
                 </div>
@@ -351,7 +351,7 @@ export default function VendorDashboard() {
                        
                        <div className="flex items-center gap-3">
                           {item.imageUrl ? (
-                             <img src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"}${item.imageUrl}`} alt={item.name} className="w-12 h-12 rounded-lg object-cover bg-slate-100" />
+                             <img src={getImageUrl(item.imageUrl)} alt={item.name} className="w-12 h-12 rounded-lg object-cover bg-slate-100" />
                           ) : (
                              <div className="w-12 h-12 rounded-lg bg-slate-100 border border-slate-200"></div>
                           )}

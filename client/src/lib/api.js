@@ -17,6 +17,14 @@ const unwrap = async (promise) => {
   return response.data.data;
 };
 
+export const getImageUrl = (path) => {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  if (path.startsWith("/uploads")) return `${client.defaults.baseURL}${path}`;
+  // For static assets in public/ like /food1.jpg
+  return path;
+};
+
 export const api = {
   setToken(token) {
     if (token) client.defaults.headers.common.Authorization = `Bearer ${token}`;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { api } from "../lib/api";
+import { api, getImageUrl } from "../lib/api";
 
 export default function ShopPage() {
   const { shopId } = useParams();
@@ -71,7 +71,7 @@ export default function ShopPage() {
       <section className="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl h-[400px]">
         {shop.imageUrl ? (
           <div className="absolute inset-0">
-             <img src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"}${shop.imageUrl}`} alt={shop.name} className="w-full h-full object-cover opacity-50" />
+             <img src={getImageUrl(shop.imageUrl)} alt={shop.name} className="w-full h-full object-cover opacity-50" />
              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
           </div>
         ) : (
@@ -152,7 +152,7 @@ export default function ShopPage() {
                   {item.imageUrl ? (
                      <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden shadow-sm border border-slate-100">
                         <img 
-                          src={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3001"}${item.imageUrl}`} 
+                          src={getImageUrl(item.imageUrl)} 
                           alt={item.name} 
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                         />
