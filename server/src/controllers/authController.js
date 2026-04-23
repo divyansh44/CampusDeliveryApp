@@ -22,6 +22,10 @@ const sanitizeUser = (user) => ({
   updatedAt: user.updated_at,
 });
 
+const ALLOWED_EMAIL_DOMAIN = "iitism.ac.in";
+
+const isAllowedEmail = (email) => email.toLowerCase().endsWith(`@${ALLOWED_EMAIL_DOMAIN}`);
+
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, phone, role } = req.body;
 
@@ -33,6 +37,11 @@ const registerUser = asyncHandler(async (req, res) => {
   if (role === "admin") {
     res.status(403);
     throw new Error("Admin accounts cannot be self-registered.");
+  }
+
+  if (!isAllowedEmail(email)) {
+    res.status(403);
+    throw new Error(`Only @${ALLOWED_EMAIL_DOMAIN} email addresses are authorised to use this platform.`);
   }
 
   const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email.toLowerCase()]);
@@ -70,6 +79,11 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!email || !password) {
     res.status(400);
     throw new Error("Email and password are required.");
+  }
+
+  if (!isAllowedEmail(email)) {
+    res.status(403);
+    throw new Error(`Only @${ALLOWED_EMAIL_DOMAIN} email addresses are authorised to use this platform.`);
   }
 
   const userQuery = await pool.query("SELECT * FROM users WHERE email = $1", [email.toLowerCase()]);
@@ -121,6 +135,11 @@ const googleLogin = asyncHandler(async (req, res) => {
   if (!payload?.email || !payload?.sub) {
     res.status(400);
     throw new Error("Invalid Google account payload.");
+  }
+
+  if (!isAllowedEmail(payload.email)) {
+    res.status(403);
+    throw new Error(`Only @${ALLOWED_EMAIL_DOMAIN} Google accounts are authorised to use this platform.`);
   }
 
   let userQuery = await pool.query(

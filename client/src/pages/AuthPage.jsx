@@ -52,7 +52,13 @@ export default function AuthPage() {
                 <input className="input-field" placeholder="Phone number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
               </div>
             )}
-            <input className="input-field" type="email" placeholder="Email address" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            <input className="input-field" type="email" placeholder="Email address (e.g. user@iitism.ac.in)" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            {form.email && !form.email.toLowerCase().endsWith("@iitism.ac.in") && (
+              <p className="text-xs text-amber-600 -mt-3 flex items-center gap-1">
+                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Only @iitism.ac.in email addresses are authorised.
+              </p>
+            )}
             <input className="input-field" type="password" placeholder="Password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
             {error && <div className="text-red-500 font-medium text-sm">{error}</div>}
             <button className="btn-primary mt-2 py-3.5 text-lg" type="submit" disabled={submitting}>

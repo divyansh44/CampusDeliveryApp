@@ -55,8 +55,9 @@ CREATE TABLE orders (
     assigned_at TIMESTAMP,
     picked_up_at TIMESTAMP,
     delivered_at TIMESTAMP,
-    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'preparing', 'ready', 'picked_up', 'delivered', 'cancelled')),
+    status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'preparing', 'ready', 'picked_up', 'delivered', 'cancelled', 'issue_reported')),
     notes TEXT DEFAULT '',
+    issue_description TEXT DEFAULT '',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

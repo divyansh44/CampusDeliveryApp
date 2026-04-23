@@ -7,6 +7,7 @@ const {
   updateOrderStatus,
   cancelMyOrder,
   getAdminOrders,
+  reportOrderIssue,
 } = require("../controllers/orderController");
 const { protect } = require("../middleware/authMiddleware");
 const { authorize } = require("../middleware/roleMiddleware");
@@ -23,6 +24,7 @@ const router = express.Router();
 router.post("/", protect, authorize("student"), placeOrderValidator, validateRequest, placeOrder);
 router.get("/my-orders", protect, authorize("student"), getMyOrders);
 router.patch("/:id/cancel", protect, authorize("student"), orderIdParamValidator, validateRequest, cancelMyOrder);
+router.post("/:id/report-issue", protect, authorize("student"), orderIdParamValidator, validateRequest, reportOrderIssue);
 
 router.get("/vendor", protect, authorize("vendor"), getVendorOrders);
 router.patch(

@@ -248,9 +248,14 @@ const cancelMyOrder = asyncHandler(async (req, res) => {
     throw new Error("You are not allowed to cancel this order.");
   }
 
-  if (!["pending", "preparing"].includes(order.status)) {
+  if (order.status !== "pending") {
     res.status(400);
-    throw new Error("This order can no longer be cancelled.");
+    const reason =
+      order.status === "preparing" ? "Your order has already started preparation and cannot be cancelled." :
+      order.status === "ready"     ? "Your order is ready and can no longer be cancelled." :
+      order.status === "picked_up" ? "Your order is already on its way and cannot be cancelled." :
+      "This order can no longer be cancelled.";
+    throw new Error(reason);
   }
 
   const updatedOrder = await pool.query("UPDATE orders SET status = 'cancelled' WHERE id = $1 RETURNING *", [order.id]);
@@ -298,6 +303,54 @@ const getAdminOrders = asyncHandler(async (req, res) => {
   });
 });
 
+const reportOrderIssue = asyncHandler(async (req, res) => {
+  const { description } = req.body;
+
+  if (!description || description.trim().length < 5) {
+    res.status(400);
+    throw new Error("Please provide a description of the issue (minimum 5 characters).");
+  }
+
+  const orderQuery = await pool.query("SELECT * FROM orders WHERE id = $1", [req.params.id]);
+
+  if (orderQuery.rows.length === 0) {
+    res.status(404);
+    throw new Error("Order not found.");
+  }
+
+  const order = orderQuery.rows[0];
+
+  if (order.student_id !== req.user.id) {
+    res.status(403);
+    throw new Error("You are not allowed to report an issue for this order.");
+  }
+
+  // Only allow reporting once the order is picked_up or delivered (driver involvement required)
+  if (!["picked_up", "delivered"].includes(order.status)) {
+    res.status(400);
+    throw new Error("Issues can only be reported for orders that have been picked up or delivered.");
+  }
+
+  // Prevent double-reporting
+  if (order.status === "issue_reported") {
+    res.status(400);
+    throw new Error("An issue has already been reported for this order.");
+  }
+
+  const updatedOrder = await pool.query(
+    "UPDATE orders SET status = 'issue_reported', issue_description = $1 WHERE id = $2 RETURNING *",
+    [description.trim(), order.id]
+  );
+
+  await emitOrderUpdate(order.id);
+
+  res.status(200).json({
+    success: true,
+    message: "Issue reported successfully. Our admin team will review and contact you shortly.",
+    data: updatedOrder.rows[0],
+  });
+});
+
 module.exports = {
   placeOrder,
   getMyOrders,
@@ -306,4 +359,5 @@ module.exports = {
   updateOrderStatus,
   cancelMyOrder,
   getAdminOrders,
+  reportOrderIssue,
 };

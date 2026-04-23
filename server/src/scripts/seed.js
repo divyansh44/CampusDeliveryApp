@@ -28,28 +28,28 @@ const seedData = async () => {
     // Create Admin
     const adminRes = await pool.query(
       `INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, email`,
-      ["Campus Admin", "admin@campus.local", passwordHash, "admin"]
+      ["Campus Admin", "admin@iitism.ac.in", passwordHash, "admin"]
     );
     const admin = adminRes.rows[0];
 
     // Create Vendor
     const vendorRes = await pool.query(
       `INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, email`,
-      ["Vendor Demo", "vendor@campus.local", passwordHash, "vendor"]
+      ["Vendor Demo", "vendor@iitism.ac.in", passwordHash, "vendor"]
     );
     const vendor = vendorRes.rows[0];
 
     // Create Student
     const studentRes = await pool.query(
       `INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, email`,
-      ["Student Demo", "student@campus.local", passwordHash, "student"]
+      ["Student Demo", "student@iitism.ac.in", passwordHash, "student"]
     );
     const student = studentRes.rows[0];
 
     // Create Driver
     const deliveryRes = await pool.query(
       `INSERT INTO users (name, email, password, role, is_available, current_zone) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email`,
-      ["Driver Demo", "driver@campus.local", passwordHash, "delivery", true, "Hostel Square"]
+      ["Driver Demo", "driver@iitism.ac.in", passwordHash, "delivery", true, "Hostel Square"]
     );
     const delivery = deliveryRes.rows[0];
 

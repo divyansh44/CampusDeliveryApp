@@ -37,6 +37,7 @@ export const api = {
   async checkoutCart(input) { return unwrap(client.post("/api/cart/checkout", input)); },
   async getMyOrders() { return unwrap(client.get("/api/orders/my-orders")); },
   async cancelOrder(orderId) { return unwrap(client.patch(`/api/orders/${orderId}/cancel`)); },
+  async reportOrderIssue(orderId, description) { return unwrap(client.post(`/api/orders/${orderId}/report-issue`, { description })); },
   async createFeedback(input) { return unwrap(client.post("/api/feedback", input)); },
   async getVendorShop() { return unwrap(client.get("/api/shops/vendor/me")); },
   async createShop(input) { return unwrap(client.post("/api/shops", input)); },
@@ -66,4 +67,7 @@ export const api = {
   async getAdminShops() { return unwrap(client.get("/api/admin/shops")); },
   async getAdminOrders() { return unwrap(client.get("/api/orders/admin")); },
   async updateUserStatus(userId, isActive) { return unwrap(client.patch(`/api/admin/users/${userId}/status`, { isActive })); },
+  async getAdminReportedOrders() { return unwrap(client.get("/api/admin/reported-orders")); },
+  async resolveOrderIssue(orderId, data) { return unwrap(client.patch(`/api/admin/orders/${orderId}/resolve`, data)); },
+  async getAdminFeedback() { return unwrap(client.get("/api/admin/feedback")); },
 };
