@@ -1,5 +1,6 @@
 ﻿# Campus Food Delivery Application
 
+Project is Deployed on Render : https://campusdeliveryapp.onrender.com/ 
 Campus food and shop ordering platform built with:
 
 - server/: Express + PostgreSQL backend
@@ -78,7 +79,8 @@ pm run seed script in server/ to generate demo data.
 4. Create a shop with name, location, description, and contact details.
 5. Add menu items with price, category, and availability.
 6. Watch incoming orders in the vendor order queue real-time.
-7. Update order status from pending to preparing, and eady (which notifies the delivery personnel if it is a campus delivery, or the student if picking up).
+7. Update order status from pending to preparing, and 
+eady (which notifies the delivery personnel if it is a campus delivery, or the student if picking up).
 
 ### 3. Student ordering flow
 
